@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Список статей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+<a href="login.html">Войти в систему</a>
+<a href="addArticle.html">Добавить статью</a>
+
+<div class="container" id="root">
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+<script>
+    fetch("/article/getArticles")
+        .then(response => response.json())
+        .then(articles => {
+            console.log(articles);
+            for (let i = 0; i < articles.length; i++) {
+                const article = articles[i];
+                const card = document.createElement('div');
+                const cardBody = document.createElement('div');
+                const h5 = document.createElement('h5');
+                const p = document.createElement('p');
+                const a = document.createElement('a');
+                card.classList.add("card", "w-75");
+                cardBody.classList.add("card-body");
+                h5.classList.add("card-title");
+                p.classList.add("card-text");
+                a.classList.add("btn", "btn-primary");
+                h5.innerText = article.title;
+                p.innerText = article.content;
+                a.href = "article.html?id="+article.id;
+                a.innerText = "Читать далее>>>";
+                cardBody.append(h5,p,a);
+                card.append(cardBody);
+                root.append(card);
+            }
+        });
+</script>
+</body>
+</html>

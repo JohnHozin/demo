@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Добавление статьи</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+</head>
+<a href="login.html">Войти в систему</a>
+<a href="index.html">На главную</a>
+<div class="container my-5">
+    <h1 class="text-center my-3">Добавление статьи</h1>
+    <div class="col-7 mx-auto">
+        <form onsubmit="sendForm(this); return false;" action="/article/addArticle" method="post">
+            <div class="mb-3">
+                <input name="title" type="text" class="form-control" placeholder="Заголовок">
+            </div>
+            <div class="mb-3">
+                <textarea id="sample" class="form-control" placeholder="Контент"></textarea>
+            </div>
+            <div class="mb-3">
+                <input name="author" type="text" class="form-control" placeholder="Автор">
+            </div>
+            <div class="mb-3">
+                <input value="Отправить" type="submit" class="btn btn-primary form-control">
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css" rel="stylesheet">
+<!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor.css" rel="stylesheet"> -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor-contents.css" rel="stylesheet"> -->
+<script src="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/suneditor.min.js"></script>
+<!-- languages (Basic Language: English/en) -->
+<script src="https://cdn.jsdelivr.net/npm/suneditor@latest/src/lang/ru.js"></script>
+<script>
+    const editor = SUNEDITOR.create((document.getElementById('sample') || 'sample'),{
+        lang: SUNEDITOR_LANG['ru'],
+        width: '100%',
+        height: '300px',
+        buttonList: [
+            [
+                'undo', 'redo',
+                'font', 'fontSize', 'formatBlock',
+                'paragraphStyle', 'blockquote',
+                'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript',
+                'fontColor', 'hiliteColor', 'textStyle',
+                'removeFormat',
+                'outdent', 'indent',
+                'align', 'horizontalRule', 'list', 'lineHeight',
+                'table', 'link', 'image', 'video', 'audio', /** 'math', */ // You must add the 'katex' library at options to use the 'math' plugin.
+                /** 'imageGallery', */ // You must add the "imageGalleryUrl".
+                'fullScreen', 'showBlocks', 'codeView',
+                'preview', 'print', 'template',
+                /** 'dir', 'dir_ltr', 'dir_rtl' */ // "dir": Toggle text direction, "dir_ltr": Right to Left, "dir_rtl": Left to Right
+            ]
+        ]
+    });
+
+    function sendForm(form){
+        const formData = new FormData();
+        formData.append('content', editor.getContents());
+        fetch('/article/addArticle', {
+            method: 'post',
+            body: formData,
+        }).then(response=>response.text())
+            .then(result=>{
+                location.href="/";
+            })
+    }
+</script>
+</body>
+</html>
